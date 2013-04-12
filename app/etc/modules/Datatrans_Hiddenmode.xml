@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+        <modules>
+                <Datatrans_Hiddenmode>
+                        <active>true</active>
+                        <codePool>community</codePool>
+                        <depends>
+                                <Mage_Payment />
+                        </depends>
+                </Datatrans_Hiddenmode>
+        </modules>
+</config>

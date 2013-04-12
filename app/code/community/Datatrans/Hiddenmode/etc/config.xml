@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @category   Mage
+ * @package    Datatrans_Hiddenmode
+ * @copyright  Copyright (c) 2012 PHOENIX MEDIA GmbH & Co. KG (http://www.phoenix-media.eu)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ -->
+<config>
+    <modules>
+        <Datatrans_Hiddenmode>
+            <version>1.1.4</version>
+        </Datatrans_Hiddenmode>
+    </modules>
+    <global>
+        <blocks>
+            <datatrans_hm>
+                <class>Datatrans_Hiddenmode_Block</class>
+            </datatrans_hm>
+        </blocks>
+        <models>
+            <datatrans_hm>
+                <class>Datatrans_Hiddenmode_Model</class>
+            </datatrans_hm>
+        </models>
+        <helpers>
+            <datatrans_hm>
+                <class>Datatrans_Hiddenmode_Helper</class>
+            </datatrans_hm>
+        </helpers>
+        <sales>
+            <order>
+                <statuses>
+                    <canceled_datatrans translate="label" module="datatrans_hm">
+                        <label>Canceled by Datatrans</label>
+                    </canceled_datatrans>
+                    <authorized translate="label" module="datatrans_hm">
+                        <label>Authorized Payment</label>
+                    </authorized>
+                </statuses>
+                <states>
+                    <canceled_datatrans translate="label" module="datatrans_hm">
+                        <label>Canceled by Datatrans</label>
+                        <statuses>
+                            <canceled_datatrans default="1" />
+                        </statuses>
+                        <!-- <visible_on_front/> -->
+                    </canceled_datatrans>
+                    <authorized translate="label" module="datatrans_hm">
+                        <label>Authorized Payment</label>
+                        <statuses>
+                            <authorized default="1" />
+                        </statuses>
+                        <!-- <visible_on_front/> -->
+                    </authorized>
+                </states>
+            </order>
+        </sales>
+        <datatrans_hm>
+            <cc>
+                <types>
+                    <AE translate="name" module="datatrans_hm">
+                        <code>AE</code>
+                        <name>American Express</name>
+                        <order>0</order>
+                    </AE>
+                    <VI translate="name" module="datatrans_hm">
+                        <code>VI</code>
+                        <name>Visa</name>
+                        <order>10</order>
+                    </VI>
+                    <MC translate="name" module="datatrans_hm">
+                        <code>MC</code>
+                        <name>Master Card</name>
+                        <order>20</order>
+                    </MC>
+                </types>
+            </cc>
+        </datatrans_hm>
+        <events>
+            <sales_order_place_before>
+                <observers>
+                    <datatrans_hiddenmode_observer>
+                        <type>singleton</type>
+                        <class>Datatrans_Hiddenmode_Model_Observer</class>
+                        <method>saveOrderInRegistry</method>
+                    </datatrans_hiddenmode_observer>
+                </observers>
+            </sales_order_place_before>
+            <checkout_type_onepage_save_order_after>
+                <observers>
+                    <datatrans_hiddenmode_observer>
+                        <type>singleton</type>
+                        <class>Datatrans_Hiddenmode_Model_Observer</class>
+                        <method>saveOrderInRegistry</method>
+                    </datatrans_hiddenmode_observer>
+                </observers>
+            </checkout_type_onepage_save_order_after>
+        </events>
+    </global>
+    <frontend>
+        <routers>
+            <datatrans_hm>
+                <use>standard</use>
+                <args>
+                    <module>Datatrans_Hiddenmode</module>
+                    <frontName>datatranshm</frontName>
+                </args>
+            </datatrans_hm>
+        </routers>
+        <layout>
+            <updates>
+                <datatrans_hm>
+                    <file>datatranshm.xml</file>
+                </datatrans_hm>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Datatrans_Hiddenmode>
+                    <files>
+                        <default>Datatrans_Hiddenmode.csv</default>
+                    </files>
+                </Datatrans_Hiddenmode>
+            </modules>
+        </translate>
+        <secure_url>
+            <datatranshm_process>/datatranshm/process/</datatranshm_process>
+        </secure_url>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Datatrans_Hiddenmode>
+                    <files>
+                        <default>Datatrans_Hiddenmode.csv</default>
+                    </files>
+                </Datatrans_Hiddenmode>
+            </modules>
+        </translate>
+    </adminhtml>
+    <default>
+        <payment>
+            <datatranshm_cc>
+                <active>0</active>
+                <model>datatrans_hm/cc</model>
+                <title>Credit Card</title>
+                <order_status>processing</order_status>
+                <debug>0</debug>
+                <cctypes>TC</cctypes>
+                <allowspecific>0</allowspecific>
+                <generic_error_msg><![CDATA[An error occured while processing the payment, please try again later.]]></generic_error_msg>
+                <allow_non_enrolled>1</allow_non_enrolled>
+                <payment_action>authorize_capture</payment_action>
+            </datatranshm_cc>
+            <datatranshm_paypal>
+                <active>0</active>
+                <model>datatrans_hm/paypal</model>
+                <title>PayPal</title>
+                <order_status>processing</order_status>
+                <debug>0</debug>
+                <allowspecific>0</allowspecific>
+                <generic_error_msg><![CDATA[An error occured while processing the payment, please try again later.]]></generic_error_msg>
+                <payment_action>authorize_capture</payment_action>
+            </datatranshm_paypal>
+            <datatranshm_postfinance>
+                <active>0</active>
+                <model>datatrans_hm/postfinance</model>
+                <title>Postfinance Card</title>
+                <order_status>processing</order_status>
+                <debug>0</debug>
+                <allowspecific>0</allowspecific>
+                <generic_error_msg><![CDATA[An error occured while processing the payment, please try again later.]]></generic_error_msg>
+                <payment_action>authorize_capture</payment_action>
+            </datatranshm_postfinance>
+            <datatranshm_postfinanceefinance>
+                <active>0</active>
+                <model>datatrans_hm/postfinanceEfinance</model>
+                <title>Postfinance E-Finance</title>
+                <order_status>processing</order_status>
+                <debug>0</debug>
+                <allowspecific>0</allowspecific>
+                <generic_error_msg><![CDATA[An error occured while processing the payment, please try again later.]]></generic_error_msg>
+                <payment_action>authorize_capture</payment_action>
+            </datatranshm_postfinanceefinance>
+        </payment>
+        <datatrans>
+            <settings>
+                <!-- Card registration URL and MPI URL generation: -->
+                <payinit_base_url>https://payment.datatrans.biz/upp/jsp/upStart.jsp</payinit_base_url>
+                <testmode_payinit_base_url>https://pilot.datatrans.biz/upp/jsp/upStart.jsp</testmode_payinit_base_url>
+                <!-- Capture, credit and cancel -->
+                <paycomplete_base_url>https://payment.datatrans.biz/upp/jsp/XML_processor.jsp</paycomplete_base_url>
+                <testmode_paycomplete_base_url>https://pilot.datatrans.biz/upp/jsp/XML_processor.jsp</testmode_paycomplete_base_url>
+                <execute_base_url>https://www.datatrans.ch/hosting/Execute.asp</execute_base_url>
+                <hmac backend_model="adminhtml/system_config_backend_encrypted"/>
+                <response_hmac backend_model="adminhtml/system_config_backend_encrypted"/>
+            </settings>
+        </datatrans>
+    </default>
+</config>
