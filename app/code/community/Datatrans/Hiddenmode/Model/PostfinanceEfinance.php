@@ -32,7 +32,7 @@ class Datatrans_Hiddenmode_Model_PostfinanceEfinance extends Datatrans_Hiddenmod
      */
     protected function _getModelSpecificParameters($params = array())
     {
-        $params['paymentmethod'] = 'POS';
+        $params['paymentmethod'] = 'PEF';
         return $params;
     }
 }
